@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const featuredProjects = (
+  await getCollection('projects', ({ data }) => data.featured)
+)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout
+  title="Home"
+  description="Gusti Birgir Karlsson, CS student at Háskólinn í Reykjavík and software engineer."
+>
+  <section class="hero">
+    <div class="container">
+      <h1>Gusti Birgir Karlsson</h1>
+      <p class="lead">
+        Final-year CS student at Háskólinn í Reykjavík. I build full-stack web
+        applications and AI pipelines. Open to software engineering roles.
+      </p>
+      <div class="hero-links">
+        <a href="/projects" class="btn-primary">See my work</a>
+        <a href="/cv.pdf" download class="btn-secondary">Download CV</a>
+      </div>
+    </div>
+  </section>
+
+  {featuredProjects.length > 0 && (
+    <section class="featured">
+      <div class="container">
+        <h2>Featured projects</h2>
+        <div class="project-grid">
+          {featuredProjects.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+        <a href="/projects" class="all-link">All projects &rarr;</a>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-16) var(--space-12);
+  }
+
+  .hero h1 {
+    margin-bottom: var(--space-4);
+  }
+
+  .lead {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    max-width: 38rem;
+    margin-bottom: var(--space-8);
+  }
+
+  .hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: var(--space-3) var(--space-5);
+    background: var(--color-accent);
+    color: #fff;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    transition: background 150ms ease;
+  }
+
+  .btn-primary:hover {
+    background: var(--color-accent-hover);
+    color: #fff;
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    padding: var(--space-3) var(--space-5);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    transition: border-color 150ms ease, color 150ms ease;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .featured {
+    padding-bottom: var(--space-12);
+  }
+
+  .featured h2 {
+    margin-bottom: var(--space-6);
+  }
+
+  .all-link {
+    display: inline-block;
+    margin-top: var(--space-6);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--color-accent);
+  }
+
+  .all-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

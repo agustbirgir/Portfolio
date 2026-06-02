@@ -1,0 +1,89 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, description, tags, github, demo } = project.data;
+---
+
+<article class="project-card">
+  <h3><a href={`/projects/${project.id}`}>{title}</a></h3>
+  <p>{description}</p>
+  {tags && tags.length > 0 && (
+    <div class="tags">
+      {tags.map((tag) => <span class="tag">{tag}</span>)}
+    </div>
+  )}
+  {(github || demo) && (
+    <div class="card-links">
+      {github && (
+        <a href={github} target="_blank" rel="noopener noreferrer">GitHub</a>
+      )}
+      {demo && (
+        <a href={demo} target="_blank" rel="noopener noreferrer">Demo</a>
+      )}
+    </div>
+  )}
+</article>
+
+<style>
+  .project-card {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    background: var(--color-bg);
+    transition: box-shadow 150ms ease, border-color 150ms ease;
+  }
+
+  .project-card:hover {
+    box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.1);
+    border-color: var(--color-accent);
+  }
+
+  .project-card h3 {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: 600;
+  }
+
+  .project-card h3 a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .project-card h3 a:hover {
+    color: var(--color-accent);
+  }
+
+  .project-card p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+  }
+
+  .card-links {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: auto;
+    padding-top: var(--space-2);
+  }
+
+  .card-links a {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--color-accent);
+  }
+
+  .card-links a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

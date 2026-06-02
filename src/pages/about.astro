@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About"
+  description="About Gusti Birgir Karlsson: CS student, SAR volunteer, and runner."
+>
+  <div class="container">
+    <article class="about prose">
+      <h1>About</h1>
+
+      <p>
+        I am a final-year computer science student at Háskólinn í Reykjavík (HR),
+        graduating in spring 2026. My focus is full-stack web development and AI
+        integration. I work primarily in TypeScript, with experience across React,
+        Node.js, and cloud platforms including Azure.
+      </p>
+
+      <section>
+        <h2>Search and rescue</h2>
+        <p>
+          I volunteer with Björgunarsveit Hafnarfjarðar, one of Iceland's rescue
+          teams. This means regular training in navigation, first aid, and working
+          effectively under pressure as part of a team. Call-outs happen at short
+          notice and require calm, coordinated action. It has shaped the way I
+          approach problems: assess the situation, communicate clearly, act.
+        </p>
+      </section>
+
+      <section>
+        <h2>Studies at HR</h2>
+        <p>
+          At Háskólinn í Reykjavík I have covered algorithms, software architecture,
+          databases, machine learning, and human-computer interaction. My thesis
+          project, completed in collaboration with Advania, applied multi-agent AI
+          to automate executive summary generation in an enterprise setting.
+        </p>
+        <p>
+          Outside coursework I have worked on personal and group projects spanning
+          web apps, CLIs, and data pipelines. I prefer shipping something real over
+          staying in tutorial land.
+        </p>
+      </section>
+
+      <section>
+        <h2>Running</h2>
+        <p>
+          I run regularly and have competed in road races in Iceland. Running gives
+          me consistent headspace and a useful lesson about compounding effort over
+          time. The same principle applies to building software.
+        </p>
+      </section>
+
+      <section>
+        <h2>Contact</h2>
+        <p>
+          The best way to reach me is by
+          <a href="mailto:agustbirgirkarlsson@gmail.com">email</a>. You can also
+          find me on <a href="https://github.com/agustbirgir" target="_blank" rel="noopener noreferrer">GitHub</a>
+          and <a href="https://linkedin.com/in/agust-birgir" target="_blank" rel="noopener noreferrer">LinkedIn</a>.
+        </p>
+      </section>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .about {
+    padding-block: var(--space-4) var(--space-12);
+  }
+
+  .about h1 {
+    margin-bottom: var(--space-6);
+  }
+
+  .about section {
+    margin-top: var(--space-8);
+  }
+
+  .about h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+  }
+</style>

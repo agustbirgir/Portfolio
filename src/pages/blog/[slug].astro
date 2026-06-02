@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formattedDate = post.data.date.toLocaleDateString('en-GB', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <div class="container">
+    <article class="prose blog-post">
+      <header>
+        <a href="/blog" class="back-link">&larr; Blog</a>
+        <h1>{post.data.title}</h1>
+        <p class="post-desc">{post.data.description}</p>
+        <time class="post-date" datetime={post.data.date.toISOString()}>
+          {formattedDate}
+        </time>
+      </header>
+
+      <div class="content">
+        <Content />
+      </div>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .blog-post {
+    padding-block: var(--space-4) var(--space-12);
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: var(--space-6);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  .back-link:hover {
+    color: var(--color-text);
+  }
+
+  header h1 {
+    margin-bottom: var(--space-3);
+  }
+
+  .post-desc {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .post-date {
+    display: block;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-8);
+  }
+
+  .content {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-8);
+  }
+</style>

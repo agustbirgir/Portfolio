@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const formattedDate = project.data.date.toLocaleDateString('en-GB', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={project.data.title} description={project.data.description}>
+  <div class="container">
+    <article class="prose project-page">
+      <header class="project-header">
+        <a href="/projects" class="back-link">&larr; Projects</a>
+        <h1>{project.data.title}</h1>
+        <p class="project-desc">{project.data.description}</p>
+        <div class="meta">
+          <time datetime={project.data.date.toISOString()}>{formattedDate}</time>
+          {project.data.tags && project.data.tags.length > 0 && (
+            <div class="tags">
+              {project.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+            </div>
+          )}
+        </div>
+        {(project.data.github || project.data.demo) && (
+          <div class="header-links">
+            {project.data.github && (
+              <a href={project.data.github} target="_blank" rel="noopener noreferrer">
+                GitHub &nearr;
+              </a>
+            )}
+            {project.data.demo && (
+              <a href={project.data.demo} target="_blank" rel="noopener noreferrer">
+                Live demo &nearr;
+              </a>
+            )}
+          </div>
+        )}
+      </header>
+
+      <div class="content">
+        <Content />
+      </div>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .project-page {
+    padding-block: var(--space-4) var(--space-12);
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: var(--space-6);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  .back-link:hover {
+    color: var(--color-text);
+  }
+
+  .project-header h1 {
+    margin-bottom: var(--space-3);
+  }
+
+  .project-desc {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-5);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+
+  .meta time {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .header-links {
+    display: flex;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+
+  .header-links a {
+    font-size: var(--text-sm);
+    font-weight: 500;
+  }
+
+  .content {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-8);
+    margin-top: var(--space-2);
+  }
+</style>
